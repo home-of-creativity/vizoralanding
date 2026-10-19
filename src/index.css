@@ -1,0 +1,197 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-en: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  --font-ar: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+
+  --color-vz-purple: #5d2b7c;
+  --color-vz-purple-deep: #43195c;
+  --color-vz-yellow: #f2d763;
+  --color-vz-yellow-deep: #e2c24a;
+  --color-vz-ink: #2a1438;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-alt: var(--bg-alt);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-line: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-band: var(--band);
+  --color-band-2: var(--band-2);
+  --color-logo: var(--logo-purple);
+}
+
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f8f5fb;
+  --surface: #ffffff;
+  --surface-2: #f3edf8;
+  --text: #2a1438;
+  --muted: #5f5270;
+  --border: #e9e0f0;
+  --primary: #5d2b7c;
+  --primary-soft: #f0e7f7;
+  --band: #5d2b7c;
+  --band-2: #4b2066;
+  --logo-purple: #5d2b7c;
+  --shadow-card: 0 1px 2px rgb(42 20 56 / 0.04), 0 8px 24px -12px rgb(42 20 56 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(42 20 56 / 0.05), 0 18px 40px -18px rgb(93 43 124 / 0.35);
+  --grid-line: rgb(93 43 124 / 0.07);
+}
+
+.dark {
+  --bg: #130a1b;
+  --bg-alt: #1a0f25;
+  --surface: #20132d;
+  --surface-2: #291a39;
+  --text: #f6f1ea;
+  --muted: #b8acc4;
+  --border: rgb(196 165 226 / 0.13);
+  --primary: #b98fdb;
+  --primary-soft: rgb(185 143 219 / 0.12);
+  --band: #2a153d;
+  --band-2: #22112f;
+  --logo-purple: #a77ccb;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 10px 30px -14px rgb(0 0 0 / 0.6);
+  --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.35), 0 20px 44px -18px rgb(0 0 0 / 0.75);
+  --grid-line: rgb(196 165 226 / 0.06);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-bg text-ink;
+    font-family: var(--font-en);
+    text-rendering: optimizeLegibility;
+  }
+  html[lang='ar'] body {
+    font-family: var(--font-ar);
+  }
+  /* Numbers, emails and handles keep their own direction inside Arabic text. */
+  .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-vz-yellow);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--color-vz-yellow);
+    color: var(--color-vz-ink);
+  }
+}
+
+/* One frame without transitions, so a theme toggle cannot fade some colours and snap others. */
+html.theme-instant,
+html.theme-instant *,
+html.theme-instant *::before,
+html.theme-instant *::after {
+  transition: none !important;
+}
+
+/* Language switch: content fades out, direction flips, content fades back in. */
+.locale-stage {
+  transition:
+    opacity 0.2s ease,
+    filter 0.2s ease;
+}
+.locale-stage.is-switching {
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Navbar logo: only the yellow details respond to hover, the mark itself stays still. */
+.logo-hover .vz-bars,
+.logo-hover .vz-tri {
+  transform-box: fill-box;
+  transition: transform 0.5s var(--ease-out-soft);
+}
+.logo-hover:hover .vz-bars {
+  transform: translate(4px, -3px);
+}
+.logo-hover:hover .vz-tri {
+  transform: translate(3px, -3px);
+}
+
+.card {
+  @apply rounded-2xl border border-line bg-surface;
+  box-shadow: var(--shadow-card);
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2.5 rounded-full bg-vz-yellow px-6 py-3.5 text-[0.95rem] font-bold text-vz-ink;
+  transition:
+    translate 0.3s var(--ease-out-soft),
+    scale 0.3s var(--ease-out-soft),
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+.btn-primary:hover {
+  translate: 0 -2px;
+  scale: 1.03;
+  background-color: var(--color-vz-yellow-deep);
+  box-shadow: 0 14px 30px -14px rgb(226 194 74 / 0.9);
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2.5 rounded-full border-2 border-primary px-6 py-3 text-[0.95rem] font-bold text-primary;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    translate 0.3s var(--ease-out-soft);
+}
+.btn-secondary:hover {
+  background-color: var(--primary);
+  color: #fff;
+  translate: 0 -2px;
+}
+.dark .btn-secondary:hover {
+  color: var(--color-vz-ink);
+}
+
+.field {
+  @apply block w-full rounded-xl border border-line bg-bg px-4 py-3 text-[0.95rem] text-ink placeholder:text-muted/60;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

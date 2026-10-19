@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#5D2B7C" />
+    <title>VIZORA</title>
+    <meta name="description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VIZORA" />
+    <meta property="og:title" content="VIZORA" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="/images/office-dashboard-day.webp" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // Applies locale and theme before first paint so there is no direction or colour flash.
+      (function () {
+        var d = document.documentElement;
+        var path = location.pathname.replace(/\/+$/, '');
+        var locale = path === '/en' ? 'en' : path === '/ar' ? 'ar' : null;
+        try {
+          if (!locale) locale = localStorage.getItem('vizora.locale');
+        } catch (e) {}
+        if (locale !== 'en' && locale !== 'ar') {
+          locale = (navigator.language || '').toLowerCase().indexOf('en') === 0 ? 'en' : 'ar';
+        }
+        d.lang = locale;
+        d.dir = locale === 'ar' ? 'rtl' : 'ltr';
+        var theme = null;
+        try {
+          theme = localStorage.getItem('vizora.theme');
+        } catch (e) {}
+        if (theme !== 'dark' && theme !== 'light') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        if (theme === 'dark') d.classList.add('dark');
+        d.style.colorScheme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>VIZORA — Data Analysis · vizora.gr@gmail.com</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
