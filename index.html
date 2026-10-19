@@ -16,7 +16,10 @@
       // Applies locale and theme before first paint so there is no direction or colour flash.
       (function () {
         var d = document.documentElement;
-        var path = location.pathname.replace(/\/+$/, '');
+        var base = '%BASE_URL%'.replace(/\/$/, '');
+        var path = location.pathname.replace(/\/+$/, '') || '/';
+        if (base && (path === base || path.indexOf(base + '/') === 0)) path = path.slice(base.length) || '/';
+        path = path.replace(/\/+$/, '');
         var locale = path === '/en' ? 'en' : path === '/ar' ? 'ar' : null;
         try {
           if (!locale) locale = localStorage.getItem('vizora.locale');

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cx } from '../lib/cx';
+import { publicUrl } from '../lib/site';
 
 export function Container({ className, children }: { className?: string; children: ReactNode }) {
   return <div className={cx('mx-auto w-full max-w-7xl px-5 sm:px-8', className)}>{children}</div>;
@@ -52,8 +53,8 @@ export function Photo({
 }) {
   return (
     <img
-      src={`/images/${name}.webp`}
-      srcSet={`/images/${name}-sm.webp 768w, /images/${name}.webp 1280w`}
+      src={publicUrl(`/images/${name}.webp`)}
+      srcSet={`${publicUrl(`/images/${name}-sm.webp`)} 768w, ${publicUrl(`/images/${name}.webp`)} 1280w`}
       sizes={sizes}
       width={1280}
       height={720}

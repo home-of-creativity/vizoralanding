@@ -2,6 +2,7 @@ import { Fragment, type MouseEvent } from 'react';
 import { useLocale } from '../i18n/LocaleContext';
 import { LOCALES, type Locale } from '../i18n/types';
 import { cx } from '../lib/cx';
+import { localeHref } from '../lib/site';
 
 const NAMES: Record<Locale, string> = { ar: 'العربية', en: 'English' };
 
@@ -24,7 +25,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
             </span>
           )}
           <a
-            href={`/${l}`}
+            href={localeHref(l)}
             hrefLang={l}
             lang={l}
             aria-label={NAMES[l]}

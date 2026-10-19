@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { prefersReducedMotion } from '../lib/motion';
+import { appPath, localeHref } from '../lib/site';
 import ar from './locales/ar';
 import en from './locales/en';
 import type { Dictionary, Locale } from './types';
@@ -19,7 +20,7 @@ interface LocaleValue {
 const LocaleContext = createContext<LocaleValue | null>(null);
 
 function localeFromPath(pathname: string): Locale | null {
-  const path = pathname.replace(/\/+$/, '');
+  const path = appPath(pathname);
   return path === '/en' ? 'en' : path === '/ar' ? 'ar' : null;
 }
 
@@ -63,7 +64,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (localeFromPath(location.pathname) !== locale) {
-      history.replaceState(null, '', `/${locale}${location.hash}`);
+      history.replaceState(null, '', `${localeHref(locale)}${location.hash}`);
     }
     const onPop = () => {
       const fromPath = localeFromPath(location.pathname);
@@ -78,7 +79,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
       if (next === locale || busy.current) return;
       const commit = () => {
         anchorRef.current = currentAnchor();
-        history.pushState(null, '', `/${next}${location.hash}`);
+        history.pushState(null, '', `${localeHref(next)}${location.hash}`);
         setLocale(next);
       };
       if (prefersReducedMotion()) {
